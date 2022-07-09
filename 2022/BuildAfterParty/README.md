@@ -1,0 +1,1 @@
+# Le novità per i developers annunciate a Microsoft Build 2022 - 04.07.22 - Ordine degli Ingegneri  -  Piazza della Vittoria 11/10, Genova GE
