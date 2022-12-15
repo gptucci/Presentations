@@ -1,0 +1,372 @@
+﻿=========================================================================
+Snippets 01 - Start 
+=========================================================================
+Vecchio modo di presentare i dati
+
+
+@using BlazorAppDemo01.Data
+@using Microsoft.AspNetCore.Components.QuickGrid
+@inject DogsService _dogsService
+
+<PageTitle>Index</PageTitle>
+
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+@if (dogsList == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+
+    //Vecchio Modo di presentare i dati
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Race</th>
+                <th>Age</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var dog in dogsList)
+            {
+                <tr>
+                    <td>@dog.Name</td>
+                    <td>@dog.Race</td>
+                    <td>@dog.Age</td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+
+
+
+
+}
+
+
+
+
+
+@code {
+    private List<Dog>? dogsList;
+
+    string nameFilter;
+
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        dogsList = _dogsService.GetDogs().OrderBy(x => x.Name).ToList();
+
+    }
+
+
+}
+
+=========================================================================
+Snippets 02 - Virtualize 
+=========================================================================
+
+@using BlazorAppDemo01.Data
+@using Microsoft.AspNetCore.Components.QuickGrid
+@inject DogsService _dogsService
+
+<PageTitle>Index</PageTitle>
+
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+@if (dogsList == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+
+    <Virtualize Items="dogsList" Context="dog">
+        <tr>
+            <td>@dog.Name</td>
+            <td>@dog.Race</td>
+            <td>@dog.Age</td>
+        </tr>
+    </Virtualize>
+
+}
+
+
+
+
+
+@code {
+    private List<Dog>? dogsList;
+
+    string nameFilter;
+
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        dogsList = _dogsService.GetDogs().OrderBy(x => x.Name).ToList();
+
+    }
+
+
+}
+
+
+
+
+=========================================================================
+Snippets 03 - Uso Griglia Evoluta
+=========================================================================
+
+@using BlazorAppDemo01.Data
+@using Microsoft.AspNetCore.Components.QuickGrid
+@inject DogsService _dogsService
+
+<PageTitle>Index</PageTitle>
+
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+@if (dogsList == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+
+    <QuickGrid Items="@dogsList" >
+        <PropertyColumn Property="@(p => p.Name)" Sortable="true" />
+        <PropertyColumn Property="@(p => p.Race)" Sortable="true" />
+
+    </QuickGrid>
+
+}
+
+@code {
+    private IQueryable<Dog>? dogsList;
+    
+    string nameFilter;
+
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        dogsList = _dogsService.GetDogs().OrderBy(x => x.Name).AsQueryable();
+        
+    }
+
+    
+}
+
+
+=========================================================================
+Snippets 04 - Uso Griglia Evoluta con Virtualize
+=========================================================================
+
+...
+<QuickGrid Items="@dogList" Virtualize="true">
+        <PropertyColumn Property="@(p => p.Name)" Sortable="true" />
+        <PropertyColumn Property="@(p => p.Race)" Sortable="true" />
+
+    </QuickGrid>
+    ..
+
+
+=========================================================================
+Snippets 05 - Uso Griglia Evoluta con Paginazione
+=========================================================================
+@using BlazorAppDemo01.Data
+@using Microsoft.AspNetCore.Components.QuickGrid
+@inject DogsService _dogsService
+
+<PageTitle>Index</PageTitle>
+
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+@if (dogsList == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+
+  
+    <QuickGrid Items="@dogsList" Pagination="@pagination">
+        <PropertyColumn Property="@(p => p.Name)" Sortable="true" />
+        <PropertyColumn Property="@(p => p.Race)" Sortable="true" />
+
+    </QuickGrid>
+        <Paginator Value="@pagination" />
+
+
+}
+
+
+
+
+
+@code {
+    private IQueryable<Dog>? dogsList;
+    
+    string nameFilter;
+    private PaginationState pagination = new PaginationState { ItemsPerPage = 50 };
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        dogsList = _dogsService.GetDogs().OrderBy(x => x.Name).AsQueryable();
+        
+    }
+
+    
+}
+
+
+
+
+
+=========================================================================
+Snippets 06 - Ricerca 
+=========================================================================
+@using BlazorAppDemo01.Data
+@using Microsoft.AspNetCore.Components.QuickGrid
+@inject DogsService _dogsService
+
+<PageTitle>Index</PageTitle>
+
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+@if (dogsList == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+
+
+
+    <QuickGrid Items="@filteredDogsList" Pagination="@pagination" ResizableColumns="true">
+            <PropertyColumn Property="@(c => c.Name)" Sortable="true">
+                <ColumnOptions>
+                <input type="search" @bind="nameFilter" @bind:event="oninput"/>
+            </ColumnOptions>
+            </PropertyColumn>
+            <PropertyColumn Property="@(p => p.Race)" Sortable="true" />
+        </QuickGrid>
+   
+    <Paginator Value="@pagination" />
+
+
+
+}
+
+
+
+
+
+@code {
+    private IQueryable<Dog>? dogsList;
+    private IQueryable<Dog>? filteredDogsList => 
+    dogsList?.Where(x => string.IsNullOrEmpty(nameFilter) || x.Name.Contains(nameFilter, StringComparison.CurrentCultureIgnoreCase));
+    
+    private PaginationState pagination = new PaginationState { ItemsPerPage = 50 };
+    string nameFilter;
+
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        dogsList = _dogsService.GetDogs().OrderBy(x => x.Name).AsQueryable();
+        
+    }
+
+    
+}
+
+=========================================================================
+Snippets 07 - Ricerca con errore after
+=========================================================================
+
+
+@using BlazorAppDemo01.Data
+@using Microsoft.AspNetCore.Components.QuickGrid
+@inject DogsService _dogsService
+
+<PageTitle>Index</PageTitle>
+
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+@if (dogsList == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+
+
+
+
+    <QuickGrid Items="@filteredDogsList" Pagination="@pagination" ResizableColumns="true">
+            <PropertyColumn Property="@(c => c.Name)" Sortable="true">
+                <ColumnOptions>
+                <input type="search" @bind="nameFilter" @bind:event="oninput" @bind:after="UpdateFilter" />
+            </ColumnOptions>
+            </PropertyColumn>
+            <PropertyColumn Property="@(p => p.Race)" Sortable="true" />
+        </QuickGrid>
+   
+    <Paginator Value="@pagination" />
+
+
+
+}
+
+
+
+
+
+@code {
+    private IQueryable<Dog>? dogsList;
+    private IQueryable<Dog>? filteredDogsList => 
+    dogsList?.Where(x => string.IsNullOrEmpty(nameFilter) || x.Name.Contains(nameFilter, StringComparison.CurrentCultureIgnoreCase));
+    
+    private PaginationState pagination = new PaginationState { ItemsPerPage = 50 };
+    string nameFilter;
+
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        dogsList = _dogsService.GetDogs().OrderBy(x => x.Name).AsQueryable();
+        
+    }
+
+    async Task UpdateFilter()
+    {
+       
+    }
+    
+}

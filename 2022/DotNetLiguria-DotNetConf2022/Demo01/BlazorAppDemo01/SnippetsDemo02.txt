@@ -1,0 +1,130 @@
+﻿=========================================================================
+Snippets 01 - Start 
+=========================================================================
+@page "/create"
+
+@using BlazorAppDemo01.Data
+@using Microsoft.AspNetCore.Components.QuickGrid
+@inject DogsService _dogsService
+
+<PageTitle>Nuovo Cane</PageTitle>
+
+
+<EditForm Model="@editDog" OnValidSubmit="SaveChangesAsync">
+        <DataAnnotationsValidator />
+       
+        <p>
+            <label for="name">Name:</label>
+        <InputText @bind-Value="@editDog.Name" id="name" class="form-control" />
+        <ValidationMessage For="@(() => editDog.Name)" />
+        </p>
+
+    <p>
+        <label for="name">Razza:</label>
+        <InputText @bind-Value="@editDog.Race" id="name" class="form-control" />
+        <ValidationMessage For="@(() => editDog.Race)" />
+    </p>
+   
+    <p>
+        <label for="name">Età:</label>
+        <InputNumber @bind-Value="@editDog.Age" id="Age" class="form-control" />
+        <ValidationMessage For="@(() => editDog.Age)" />
+    </p>
+
+        <button class="btn btn-primary" type="submit">Save</button>
+</EditForm>
+
+<a href="https://www.enci.it/libro-genealogico/razze">Clicca qui</a> per conoscere la lista completa delle razze riconosciute.
+
+@code {
+    private Dog editDog;
+    
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        editDog = new();
+        
+
+    }
+
+    async Task SaveChangesAsync()
+    {
+       //Logica Salvataggio
+    }
+}
+=========================================================================
+Snippets 02 - Implemetazione corretta NavigationLock 
+=========================================================================
+
+@page "/create"
+
+@using BlazorAppDemo01.Data
+@using Microsoft.AspNetCore.Components.QuickGrid
+@inject DogsService _dogsService
+@inject IJSRuntime JS
+
+<PageTitle>Nuovo Cane</PageTitle>
+
+
+<EditForm Model="@editDog" OnValidSubmit="SaveChangesAsync">
+        <DataAnnotationsValidator />
+       
+        <p>
+            <label for="name">Name:</label>
+        <InputText @bind-Value="@editDog.Name" id="name" class="form-control" />
+        <ValidationMessage For="@(() => editDog.Name)" />
+        </p>
+
+    <p>
+        <label for="name">Razza:</label>
+        <InputText @bind-Value="@editDog.Race" id="name" class="form-control" />
+        <ValidationMessage For="@(() => editDog.Race)" />
+    </p>
+   
+    <p>
+        <label for="name">Età:</label>
+        <InputNumber @bind-Value="@editDog.Age" id="Age" class="form-control" />
+        <ValidationMessage For="@(() => editDog.Age)" />
+    </p>
+
+        <button class="btn btn-primary" type="submit">Save</button>
+</EditForm>
+
+<a href="https://www.enci.it/libro-genealogico/razze">Clicca qui</a> per conoscere la lista completa delle razze riconosciute.
+
+
+
+<NavigationLock ConfirmExternalNavigation="true"  OnBeforeInternalNavigation="ConfirmInternalNavigation"/>
+
+@code {
+    private Dog editDog;
+    
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        editDog = new();
+        
+
+    }
+
+    async Task SaveChangesAsync()
+    {
+       //Logica Salvataggio
+    }
+
+
+    async Task ConfirmInternalNavigation(LocationChangingContext locationChanging)
+    {
+        
+            var isConfirmed = await JS.InvokeAsync<bool>("confirm", "Confermi di lasciare la pagina ?");
+            if (!isConfirmed)
+            {
+                locationChanging.PreventNavigation();
+            }
+        }
+    }
+}

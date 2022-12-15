@@ -1,0 +1,58 @@
+﻿@using BlazorCustomElement.Data
+@using Microsoft.AspNetCore.Components.QuickGrid
+@inject DogsService _dogsService
+
+<h1>Lista Cani</h1>
+
+
+
+@if (dogsList == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+   
+    <QuickGrid Items="@filteredDogsList" Pagination="@pagination" ResizableColumns="true">
+        <PropertyColumn Property="@(c => c.Name)" Sortable="true">
+            <ColumnOptions>
+                <input type="search" @bind="nameFilter" @bind:event="oninput" />
+            </ColumnOptions>
+        </PropertyColumn>
+        <PropertyColumn Property="@(p => p.Race)" Sortable="true" />
+    </QuickGrid>
+
+    <Paginator Value="@pagination" />
+
+
+
+}
+
+
+
+
+
+@code {
+    private IQueryable<Dog>? dogsList;
+    private IQueryable<Dog>? filteredDogsList =>
+    dogsList?.Where(x => (string.IsNullOrEmpty(nameFilter) || x.Name.Contains(nameFilter, StringComparison.CurrentCultureIgnoreCase))
+    
+    && (string.IsNullOrEmpty(Race) || x.Race.Contains(Race, StringComparison.CurrentCultureIgnoreCase))
+    
+    );
+
+    private PaginationState pagination = new PaginationState { ItemsPerPage = 50 };
+    string nameFilter;
+
+    [Parameter] public string? Race { get; set; }
+    
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        dogsList = _dogsService.GetDogs().OrderBy(x => x.Name).AsQueryable();
+
+    }
+
+
+}

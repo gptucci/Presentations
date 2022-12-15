@@ -1,0 +1,62 @@
+﻿@using BlazorAppDemo01.Data
+@using Microsoft.AspNetCore.Components.QuickGrid
+@inject DogsService _dogsService
+
+<PageTitle>Index</PageTitle>
+
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+@if (dogsList == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+
+@*
+
+
+    <QuickGrid Items="@filteredDogsList" Pagination="@pagination" ResizableColumns="true">
+        <PropertyColumn Property="@(c => c.Name)" Sortable="true">
+            <ColumnOptions>
+                <input type="search" @bind="nameFilter" @bind:event="oninput" @bind:after="UpdateFilter" />
+            </ColumnOptions>
+        </PropertyColumn>
+        <PropertyColumn Property="@(p => p.Race)" Sortable="true" />
+    </QuickGrid>
+
+    <Paginator Value="@pagination" />*@
+
+
+
+}
+
+
+
+
+
+@code {
+    private IQueryable<Dog>? dogsList;
+    private IQueryable<Dog>? filteredDogsList =>
+    dogsList?.Where(x => string.IsNullOrEmpty(nameFilter) || x.Name.Contains(nameFilter, StringComparison.CurrentCultureIgnoreCase));
+
+    private PaginationState pagination = new PaginationState { ItemsPerPage = 50 };
+    string nameFilter;
+
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        dogsList = _dogsService.GetDogs().OrderBy(x => x.Name).AsQueryable();
+
+    }
+
+    async Task UpdateFilter()
+    {
+        //Ricera anche asincrona (interazione remota ?)
+    }
+
+}
