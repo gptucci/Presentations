@@ -1,0 +1,2 @@
+# Genova Mobile Development - 19/06/2018 -  Azure Mobile App
+Utilizzo degli Azure Mobile APp, e relativo SDK, per realizzare una app cross-platform dotata di autenticazione e utilizzo dei dati in un contesto offline syn
