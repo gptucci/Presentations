@@ -1,0 +1,25 @@
+﻿@page "/"
+
+<PageTitle>Home</PageTitle>
+
+<h1>Hello, world!</h1>
+
+
+@if (isMobilePlatform)
+{
+    <h1>Il codice è in esecuzione su Mobile</h1>
+}
+else
+{
+    <h1>Il codice è in esecuzione su Desktop</h1>
+}
+
+@code {
+
+    
+    bool isMobilePlatform = OperatingSystem.IsAndroid() || OperatingSystem.IsIOS();
+    protected override async Task OnInitializedAsync()
+    {
+        
+    }
+}
