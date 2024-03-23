@@ -1,0 +1,6 @@
+@AzureMobSvc.Srv_HostAddress = http://localhost:5251
+
+GET {{AzureMobSvc.Srv_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

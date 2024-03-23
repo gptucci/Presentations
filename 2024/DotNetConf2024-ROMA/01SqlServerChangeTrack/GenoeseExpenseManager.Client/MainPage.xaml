@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="GenoeseExpenseManager.Client.MainPage"
+             xmlns:local="clr-namespace:GenoeseExpenseManager.Client"
+             x:DataType="local:MainPageViewModel">
+    <Grid Margin="9"
+          HorizontalOptions="FillAndExpand"
+          VerticalOptions="FillAndExpand">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0"
+              RowDefinitions="*,*,*,*"
+              ColumnDefinitions="auto,auto" HorizontalOptions="StartAndExpand" WidthRequest="360">
+            <Label Text="Data"
+                   Grid.Row="0"></Label>
+            <DatePicker Grid.Row="0"
+                        Grid.Column="1"
+                        Date="{Binding SpesaInEditing.Data}"></DatePicker>
+            <Label Text="Importo" Grid.Row="1"></Label>
+            <Entry x:Name="txtExpenseEntryImporto"
+                   Grid.Row="1" Grid.Column="1"
+                   AutomationId="ExpenseEntry"
+                   Text="{Binding SpesaInEditing.Importo}"
+                   Placeholder="Enter Todo"
+                   FlexLayout.Grow="1"
+                   Keyboard="Numeric" />
+
+            <Label Text="Nota"
+                   Grid.Row="2"></Label>
+            <Entry x:Name="txtExpenseEntryNota"
+                   Grid.Row="2"
+                   Grid.Column="1"
+                   AutomationId="ExpenseEntry"
+                   Text="{Binding SpesaInEditing.Nota}"
+                   Placeholder="Nota spesa"
+                   FlexLayout.Grow="1"
+                   Keyboard="Plain" />
+            <Button Text="Salva"
+                    Grid.Row="3"
+                    Grid.Column="0"
+                    Command="{Binding SaveExpenseCommand}"
+                    
+                    HorizontalOptions="FillAndExpand"
+                    VerticalOptions="FillAndExpand"
+                    Margin="0,5,0,5" />
+
+        </Grid>
+        <CollectionView Grid.Row="1"
+                        ItemsSource="{Binding Expenses}"
+                        EmptyView="Nessuna spesa da visualizzare (grazie al clielo !!!!)"
+                        Margin="9,2,2,2"
+                        ItemsLayout="VerticalGrid, 2">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="local:Expense">
+                    <VerticalStackLayout AutomationId="TodoItem">
+                        <FlexLayout AlignItems="Center"
+                                    JustifyContent="Center"
+                                    MinimumHeightRequest="50">
+                            <Label AutomationId="Data"
+                                   FlexLayout.Grow="1"
+                                   Text="{Binding Data, StringFormat='{0:dd/MM/yyyy}'}"
+                                   HeightRequest="30"
+                                   Margin="0,5,0,5"/>
+                            <Label AutomationId="Importo"
+                                   FlexLayout.Grow="1"
+                                   Text="{Binding Importo,StringFormat='€ {0:N2}'}"
+                                   HeightRequest="30"
+                                   Margin="0,5,0,5" />
+                            <Label AutomationId="Importo"
+                                   FlexLayout.Grow="1"
+                                   Text="{Binding Nota}"
+                                   HeightRequest="30"
+                                   Margin="0,5,0,5" />
+
+                            <!--<ImageButton AutomationId="TodoItemCompleteButton"
+                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:TaskViewModel}}, Path=CompleteTodoCommand}"
+                            CommandParameter="{Binding .}"
+                            Source="done.png"
+                            Padding="10"
+                            WidthRequest="5"
+                            HeightRequest="5"
+                            BackgroundColor="White"
+                            Margin="3,0,3,0"
+                            CornerRadius="5" />
+                            <ImageButton AutomationId="TodoItemDeleteButton"
+                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:TaskViewModel}}, Path=DeleteTodoCommand}"
+                            CommandParameter="{Binding .}"
+                            Source="delete.png"
+                            Padding="10"
+                            WidthRequest="5"
+                            HeightRequest="5"
+                            BackgroundColor="White"
+                            CornerRadius="5"></ImageButton>-->
+                        </FlexLayout>
+                    </VerticalStackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>

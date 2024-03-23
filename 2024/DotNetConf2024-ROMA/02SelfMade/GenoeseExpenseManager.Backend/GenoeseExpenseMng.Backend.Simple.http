@@ -1,0 +1,7 @@
+//@GenoeseExpenseMng.Backend.Simple_HostAddress = http://localhost:5159
+@GenoeseExpenseMng.Backend.Simple_HostAddress = https://dotnetconfsqlwebsrv-selfmade.azurewebsites.net
+
+GET {{GenoeseExpenseMng.Backend.Simple_HostAddress}}/api/odata/ODataExpense
+Accept: application/json
+
+###

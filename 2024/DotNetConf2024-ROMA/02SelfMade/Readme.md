@@ -1,0 +1,1 @@
+E' la versione semplice senza autenticazione
