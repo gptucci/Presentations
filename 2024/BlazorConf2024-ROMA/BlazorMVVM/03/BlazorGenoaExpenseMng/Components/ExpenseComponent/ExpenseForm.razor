@@ -1,0 +1,66 @@
+﻿@if (viewModel.IsBusy)
+{
+    
+  <label  >Operazione in corso: attendere</Label>
+
+}
+
+<EditForm Model="viewModel.ExpenseItemInEditing" OnValidSubmit="@(()=> {
+                        if (viewModel.SalvaEditingCommand.CanExecute(null))
+                                viewModel.SalvaEditingCommand.Execute(null);
+                        })">
+      <DataAnnotationsValidator />
+      <div >
+              <label>
+                Date:
+            <InputDate @bind-Value=viewModel.ExpenseItemInEditing.ExpenseDate />
+            </label>
+        </div>
+
+       <div>
+    
+             <label>
+                Amount:
+                <InputNumber @bind-Value=viewModel.ExpenseItemInEditing.Amount></InputNumber>
+            </label>
+      </div>
+       <div>
+               <label>
+                Note:
+            <InputText @bind-Value="viewModel.ExpenseItemInEditing.ExpenseNote" />
+            </label>
+       </div>
+   
+       <div >
+            @*In caso di bottone che usa Command in caso di NON possibilità di eseguire il comando questo viene graficamente disabilitato
+                Quello che viene usato il metodo CanExecute legato all'oggetto Command 
+            In Blazor NON abbiamo nativamente bottoni cui associare un command, per cui occorre fare manualmente*@
+             <button type="submit" disabled=@(viewModel.IsBusy)>Submit</button>
+
+             @*La logica suggerisce, quindi, che un metodo corretto dovrebbe essere il seguente*@
+              @* <button type="submit" disabled=@(!viewModel.SalvaEditingCommand.CanExecute(null))>Submit</button> *@
+            
+            @*Però purtroppo questo NON funziona nel modo corretto - Infatti CanExecute restituisce false anche quando IsBusy=false perchè è in esecuzione ancora il metodo associato*@
+            @*Quindi in altri termini per una questione di timing NON è possibile usare questo metodo in Blazor*@
+
+           
+           
+            @* Come detto alcuni controlli gestiscono in modo nativo il command - per esempio Blazorize *@
+        @* <Button Color="Color.Primary" Command="@viewModel." Type="ButtonType.Submit">Salva</Button>  *@
+       
+    </div>
+</EditForm>
+
+ @* E' possibile anche creare un controllo che implementa un bottone che accetta Command *@
+        @* <CommandButton class="btn btn-primary" CommandClick="viewModel.SalvaEditingCommand" >Salva</CommandButton> *@
+
+ @* E' anche possibile fare un controllo editform specializzato che  accetta come handler di OnValid un Command *@
+
+
+@code {
+
+
+    [CascadingParameter(Name = "ViewModel")]
+    MainPageViewModel viewModel { get; set; }
+
+}

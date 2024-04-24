@@ -1,0 +1,44 @@
+﻿<h3>ExpensesList</h3>
+Totale items: @viewModel.ExpenseItemItemsCount
+@implements IDisposable
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Amount</th>
+        </tr>
+    </thead>
+    <tbody>
+        <Virtualize Items="viewModel.ExpenseItemItems" Context="expense">
+            <tr>
+                <td>@expense.ExpenseDate</td>
+                <td>@expense.Amount</td>
+                
+            </tr>
+        </Virtualize>
+    </tbody>
+</table>
+
+@code {
+
+
+    [CascadingParameter(Name = "ViewModel")]
+    MainPageViewModel viewModel { get; set; }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        // viewModel.ExpenseItemItems.CollectionChanged += async (s, p) => await InvokeAsync(StateHasChanged);
+
+
+
+
+        await base.OnInitializedAsync();
+    }
+    public void Dispose()
+    {
+        viewModel.ExpenseItemItems.CollectionChanged -= async (s, p) => await InvokeAsync(StateHasChanged);
+    }
+}

@@ -1,0 +1,32 @@
+﻿<EditForm Model="viewModel.ExpenseItemInEditing" OnValidSubmit="@(()=> {
+                    if (viewModel.SalvaEditingCommand.CanExecute(null))
+                            viewModel.SalvaEditingCommand.Execute(null);
+                    })">
+    <DataAnnotationsValidator />
+    <div>
+        <label>
+            Date:
+            <InputDate @bind-Value=viewModel.ExpenseItemInEditing.ExpenseDate />
+            </label>
+            <label>
+                Amount:
+                <InputNumber @bind-Value=viewModel.ExpenseItemInEditing.Amount></InputNumber> </label>
+      
+        <label>
+            Note:
+            <InputText @bind-Value="viewModel.ExpenseItemInEditing.ExpenseNote" />
+        </label>
+    </div>
+    <div>
+        <button type="submit" disabled="@(viewModel.IsBusy)">Submit</button>
+    </div>
+</EditForm>
+
+
+
+
+@code {
+    [CascadingParameter(Name = "ViewModel")]
+    MainPageViewModel viewModel { get; set; }
+    
+}

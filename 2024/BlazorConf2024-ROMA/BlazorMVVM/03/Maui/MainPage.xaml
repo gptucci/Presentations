@@ -1,0 +1,139 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MauiGenoaExpenseMng.MainPage">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="30,0"
+                             Spacing="2">
+            <Label Text="Operazione in corso: attendere"
+                   IsVisible="{Binding IsBusy}"
+                   TextColor="Red"></Label>
+            <Frame BorderColor="Gray"
+                   CornerRadius="10"
+                   WidthRequest="270">
+                <VerticalStackLayout>
+                    <Label Text="Data"
+                           FontSize="24"
+                           VerticalOptions="Center" />
+                    <DatePicker x:Name="entryData"
+                                WidthRequest="180"
+                                Date="{Binding ExpenseItemInEditing.ExpenseDate}"
+                                HorizontalOptions="StartAndExpand" />
+
+                    <Label Text="Amount"
+                           FontSize="24"
+                           VerticalOptions="Center" />
+                    <Entry x:Name="EntryAmount"
+                           Placeholder="Enter a new item"
+                           WidthRequest="180"
+                           Text="{Binding ExpenseItemInEditing.Amount}"
+                           HorizontalOptions="StartAndExpand" />
+                    <Label Text="Note"
+                           FontSize="24"
+                           VerticalOptions="Center" />
+                    <Entry x:Name="entryNote"
+                           Placeholder="Expense Note"
+                           WidthRequest="180"
+                           Text="{Binding ExpenseItemInEditing.ExpenseNote}"
+                           HorizontalOptions="StartAndExpand" />
+
+
+
+
+                    <Button x:Name="CounterBtn"
+                            Text="Salva"
+                            Margin="10"
+                            Command="{Binding SalvaEditingCommand}"
+                            SemanticProperties.Hint="Counts the number of times you click"
+                            HorizontalOptions="Start"
+                            WidthRequest="180" />
+
+                </VerticalStackLayout>
+            </Frame>
+            <Label Text="{Binding ExpenseItemItemsCount,StringFormat='Item: {0}'}"
+                   HorizontalOptions="Start"
+                   FontSize="24"
+                   WidthRequest="180"
+                   VerticalOptions="Center" />
+            <Frame BorderColor="Gray"
+                   CornerRadius="10">
+
+                <CollectionView x:Name="ToDoList"
+                                ItemsSource="{Binding ExpenseItemItems}"
+                                SelectionMode="None"
+                                VerticalOptions="FillAndExpand"
+                                ItemSizingStrategy="MeasureAllItems">
+                    <CollectionView.Header>
+                        <Grid Padding="10"
+                              ColumnSpacing="10"
+                              HorizontalOptions="FillAndExpand">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0"
+                                   Text="Date"
+                                   FontSize="24"
+                                   FontAttributes="Bold"
+                                   VerticalOptions="Center" />
+                            <Label Grid.Column="1"
+                                   Text="Amount"
+                                   HorizontalOptions="Center"
+                                   FontSize="24"
+                                   FontAttributes="Bold"
+                                   VerticalOptions="Center" />
+
+                            <Label Grid.Column="2"
+                                   Text="Note"
+                                   FontSize="24"
+                                   FontAttributes="Bold"
+                                   VerticalOptions="Center"
+                                   HorizontalOptions="End" />
+
+                        </Grid>
+                    </CollectionView.Header>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Padding="10"
+                                  ColumnSpacing="10"
+                                  RowDefinitions="*,*"
+                                  HorizontalOptions="FillAndExpand">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+
+                                </Grid.ColumnDefinitions>
+                                <Label Grid.Column="0"
+                                       Text="{Binding ExpenseDate,StringFormat='{0:dd/MM/yyyy}'}"
+                                       FontSize="24"
+                                       VerticalOptions="Center" />
+                                <Label Grid.Column="1"
+                                       Text="{Binding Amount}"
+                                       FontSize="24"
+                                       VerticalOptions="Center"
+                                       HorizontalOptions="End" />
+                                <Label Grid.Column="2"
+                                       Text="{Binding ExpenseNote}"
+                                       FontSize="24"
+                                       VerticalOptions="Center"
+                                       HorizontalOptions="End" />
+
+                                <BoxView HeightRequest="3"
+                                         Color="Black"
+                                         Grid.Row="1"
+                                         Grid.ColumnSpan="3"></BoxView>
+
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+            </Frame>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

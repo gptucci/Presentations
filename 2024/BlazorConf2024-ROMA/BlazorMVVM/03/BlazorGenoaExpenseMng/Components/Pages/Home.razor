@@ -1,0 +1,61 @@
+﻿@page "/"
+@using BlazorGenoaExpenseMng.Components
+@using System.ComponentModel
+@implements IDisposable
+
+
+<CascadingValue Value=@viewModel Name="ViewModel">
+    <ExpenseForm />
+    <ExpensesList />
+</CascadingValue>
+@code {
+    [Inject]
+    MainPageViewModel viewModel { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        //Occhio ai memoryleak !!!!
+        viewModel.PropertyChanged += async (s, p) => 
+                    await InvokeAsync(StateHasChanged);
+
+        // viewModel.ExpenseItemItems.CollectionChanged += async (s, p) => await InvokeAsync(StateHasChanged);
+
+        await viewModel.InitializeAsync();
+        
+
+        //In caso di diverse ObservableCollection è meglio saure il reflection
+        //Anche in questo caso alcuni controlli terze parti supportano le observable.
+
+        // var listaProp = viewModel.GetType().GetProperties();
+        // foreach (var itemlistaProp in listaProp.Where(x=>x.PropertyType.IsGenericType))
+        // {
+        //     if (itemlistaProp.PropertyType.GetGenericTypeDefinition() == typeof(System.Collections.ObjectModel.ObservableCollection<>) &&
+        //             itemlistaProp.CanRead )
+        //     {
+        //         var eventCollectionChangedInfo = itemlistaProp.PropertyType.GetEvent("CollectionChanged");
+
+        //         var eventHandler = new Action<object, NotifyCollectionChangedEventArgs>(
+        //             async (s, a) =>
+        //             {
+
+        //                 await InvokeAsync(StateHasChanged);
+
+        //             });
+        //         var del = Delegate.CreateDelegate(eventCollectionChangedInfo.EventHandlerType, eventHandler.Target, eventHandler.Method);
+        //         var o = itemlistaProp.GetValue(viewModel, null);
+        //         eventCollectionChangedInfo.AddEventHandler(o, del);
+        //     }
+        // }
+
+
+        await base.OnInitializedAsync();
+    }
+
+    
+
+    public void Dispose()
+    {
+        viewModel.PropertyChanged -= async (s, p) => await InvokeAsync(StateHasChanged);
+    }
+}

@@ -1,0 +1,44 @@
+﻿
+
+<button class="@(@class)" @onclick="OnClick" disabled="@(!CanRunCommand)">@ChildContent</button>
+
+
+@code {
+    [Parameter]
+    public System.Windows.Input.ICommand CommandClick { get; set; }
+
+    string type { get; set; }
+
+    [Parameter]
+    public string @class { get; set; }
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    bool CanRunCommand { get; set; }
+
+    void OnClick()
+    {
+        if (CommandClick == null)
+            return;
+
+        if (CommandClick.CanExecute(null))
+        {
+            CommandClick.Execute(null);
+        }
+    }
+
+    protected override void OnParametersSet()
+    {
+
+
+        if (CommandClick == null)
+        {
+            return;
+        }
+
+        CanRunCommand = CommandClick.CanExecute(null);
+
+    }
+
+}

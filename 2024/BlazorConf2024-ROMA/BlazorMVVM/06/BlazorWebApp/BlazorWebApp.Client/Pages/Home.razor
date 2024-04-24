@@ -1,0 +1,33 @@
+﻿@page "/"
+@rendermode InteractiveAuto
+@* Disabilitare il prerendering @rendermode @(new InteractiveAutoRenderMode(false)) *@
+
+<PageTitle>Home</PageTitle>
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+<p>@(OperatingSystem.IsBrowser() ? "WASM" : "SRV")</p>
+
+
+<CascadingValue Value=@viewModel Name="ViewModel">
+    <ExpenseForm />
+    <ExpensesList />
+</CascadingValue>
+
+
+
+
+@code {
+
+
+    [Inject]
+    MainPageViewModel viewModel { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        viewModel.PropertyChanged += async (s, p) => await InvokeAsync(StateHasChanged);
+        await viewModel.InitializeAsync();
+
+    }
+
+}

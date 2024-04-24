@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MauiGenoaExpenseMng.MainPage">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="30,0"
+                             Spacing="25">
+            <HorizontalStackLayout HorizontalOptions="StartAndExpand" Spacing="10">
+
+                <Label Text="Amount"
+                       FontSize="24"
+                       VerticalOptions="Center" />
+                <Entry x:Name="EntryAmount"
+                       Placeholder="Enter a new item"
+                       Text="{Binding ExpenseItemInEditing.Amount}"
+                       HorizontalOptions="Fill" />
+                <Label Text="Note"
+                       FontSize="24"
+                       VerticalOptions="Center" />
+                <Entry x:Name="entryNote"
+                       Placeholder="Expense Note"
+                       Text="{Binding ExpenseItemInEditing.ExpenseNote}"
+                       HorizontalOptions="Fill" />
+
+                <Label Text="Data"
+                       FontSize="24"
+                       VerticalOptions="Center" />
+                <DatePicker x:Name="entryData"
+                            Date="{Binding ExpenseItemInEditing.ExpenseDate}"
+                       HorizontalOptions="Fill" />
+            </HorizontalStackLayout> 
+            
+            <Button x:Name="CounterBtn"
+                    Text="Click me"
+                    Command="{Binding SalvaEditingCommand}"
+                    SemanticProperties.Hint="Counts the number of times you click"
+                    HorizontalOptions="Fill" />
+            <Label Text="{Binding ExpenseItemItemsCount,StringFormat='Item: {0}'}"
+                   HorizontalOptions="Start"
+                   FontSize="24"
+                   VerticalOptions="Center" />
+
+            <CollectionView x:Name="ToDoList"
+                            ItemsSource="{Binding ExpenseItemItems}"
+                            SelectionMode="None"
+                            VerticalOptions="FillAndExpand"
+                            ItemSizingStrategy="MeasureAllItems">
+                <CollectionView.Header>
+                    <Grid Padding="10"
+                          ColumnSpacing="10" HorizontalOptions="FillAndExpand">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0"
+                               Text="Amount"
+                               FontSize="24"
+                               VerticalOptions="Center" />
+                        <Label Grid.Column="1"
+                               Text="Note"
+                               FontSize="24"
+                               VerticalOptions="Center" />
+
+                        <Label Grid.Column="2"
+                               Text="Data"
+                               FontSize="24"
+                               VerticalOptions="Center" />
+
+                    </Grid>
+                </CollectionView.Header>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="10"
+                              ColumnSpacing="10"
+                              HorizontalOptions="FillAndExpand">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0"
+                                   Text="{Binding Amount}"
+                                   FontSize="24"
+                                   VerticalOptions="Center" />
+                            <Label Grid.Column="1"
+                                   Text="{Binding ExpenseNote}"
+                                   FontSize="24"
+                                   VerticalOptions="Center" />
+                            <Label Grid.Column="2"
+                                   Text="{Binding ExpenseDate,StringFormat='{0:dd/MM/yyyy}'}"
+                                   FontSize="24"
+                                   VerticalOptions="Center" />
+
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

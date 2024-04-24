@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Shared.Mvvm\Shared.Mvvm.csproj" />
+  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Blazorise.Bootstrap" Version="1.4.2" />
+		<PackageReference Include="Blazorise.Icons.FontAwesome" Version="1.4.2" />
+	</ItemGroup>
+</Project>

@@ -1,0 +1,36 @@
+﻿@page "/"
+@using BlazorGenoaExpenseMng.Components
+@using System.ComponentModel
+@using System.Collections.Specialized
+@* I controlli devono derivare da MvvmComponentBase*@
+@inherits MvvmComponentBase<MainPageViewModel>
+@inject IMvvmNavigationManager mvvmNavigationManager
+
+<CascadingValue Value=@ViewModel Name="ViewModel">
+    <ExpenseForm />
+    <ExpensesList />
+</CascadingValue>
+
+
+<button @onclick="vaiASecondaPagina">Vai a seconda pagina</button>
+@code {
+    // [Inject]
+    // MainPageViewModel viewModel { get; set; }
+
+    // protected override async Task OnInitializedAsync()
+    // {
+    //     //non serve più !!!
+    //     // ViewModel.PropertyChanged += async (s, p) => await InvokeAsync(StateHasChanged);
+        
+        
+    //     //Non serve più
+    //     //await viewModel.InitializeAsync();
+
+    //     await base.OnInitializedAsync();
+        
+    // }
+    void vaiASecondaPagina()
+    {
+        mvvmNavigationManager.NavigateTo<SecondaPaginaViewModel>(string.Empty);
+    }
+}
